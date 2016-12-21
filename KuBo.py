@@ -47,12 +47,18 @@ class KuBo():
 		self.cb_higher = self.pi.callback(self.higherReedPin, pigpio.RISING_EDGE, self._callback_higher)
 				
 		# zero count parameters
+<<<<<<< HEAD
 		self.max_zero_count = 45
 		# self.max_zero_count = 1000
+=======
+		#self.max_zero_count = 45
+		self.max_zero_count = 2000
+>>>>>>> 663b9502f56d58be3c9e90dfed9eeefdaee9291b
 		self.min_zero_count = 5
 		
 		# one count parameters
 		self.min_one_count = 3
+<<<<<<< HEAD
 		
 		# polling period
 		self.T_poll = 0.001
@@ -69,13 +75,33 @@ class KuBo():
 		self.higher_weight = 0
 		self.higher_flag = 0
 		self.higher_timestamp = 0
+=======
+		
+		# polling period
+		self.T_poll = 0.001
+		
+		# lower reed contact data
+		self.lower_timestamps = []
+		self.lower_speed = 0
+		self.lower_weight = 0
+		self.lower_history = []
+		
+		# higher reed contact data
+		self.higher_timestamps = []
+		self.higher_speed = 0
+		self.higher_weight = 0
+		self.higher_history = []
+>>>>>>> 663b9502f56d58be3c9e90dfed9eeefdaee9291b
 		
 		
 		# Locks
 		self.lock_lower = threading.Lock()
 		self.lock_higher = threading.Lock()
+<<<<<<< HEAD
 		
 		self.data = []
+=======
+>>>>>>> 663b9502f56d58be3c9e90dfed9eeefdaee9291b
 
 		
 	def start_jumping(self, end_pos, freq):
@@ -177,6 +203,7 @@ class KuBo():
 		return self.omx.quit()
 		
 	def _callback_lower(self, gpio, level, tick):
+<<<<<<< HEAD
 		
 		t = time.time()
 		
@@ -188,10 +215,17 @@ class KuBo():
 		print "==== Callback lower reed contact ===="
 		
 		timestamps = []
+=======
+		print "==== Callback lower reed contact ===="
+		t = time.time()
+		# stop interrupts
+		self.cb_lower.cancel()
+>>>>>>> 663b9502f56d58be3c9e90dfed9eeefdaee9291b
 		magnet_count = 0
 		one_count = 0
 		while True:
 			inter_flag = False
+<<<<<<< HEAD
 			input = 1
 			while input:
 				input = self.pi.read(gpio)
@@ -215,12 +249,25 @@ class KuBo():
 				# debug
 				# self.data.append(input)
 				
+=======
+			while self.pi.read(gpio):
+					one_count = one_count + 1
+					time.sleep(self.T_poll)
+			if one_count < self.min_one_count:
+				# Interference if no valey interference compensates for it
+				print "Peak Interference suspicion"
+				inter_flag = True
+			
+			zero_count = 0
+			while self.pi.read(gpio) == 0:
+>>>>>>> 663b9502f56d58be3c9e90dfed9eeefdaee9291b
 				zero_count = zero_count + 1
 				time.sleep(self.T_poll)
 				if zero_count > self.max_zero_count:
 					# No more consecutive magnets --> activate 
 					# interrupts again for next passing of weights
 					break
+<<<<<<< HEAD
 				elif inter_flag and zero_count >= self.min_zero_count:
 					# No valey interference to compensate for peak interference
 					# check if interference is isolated
@@ -274,10 +321,51 @@ class KuBo():
 				magnet_count = magnet_count + 1
 				print "Magnet Count: ", magnet_count
 					
+=======
+			if zero_count < self.min_zero_count:
+				# Interference --> continue with first while loop
+				print "Valey Interference detected on lower contact"
+				if inter_flag:
+					print "No peak interference"
+			elif zero_count > self.max_zero_count:
+				if not inter_flag:
+					# Do calculations here
+					magnet_count = magnet_count + 1
+					print "Magnet Count: ", magnet_count
+					with self.lock_lower: # save old timestamp
+						self.lower_timestamps.append(t)
+						print " Timestamps: ", self.lower_timestamps
+						self.lower_history.append(self.lower_timestamps)
+						self.lower_timestamps = []
+					
+					print "End of consecutive magnets"
+				else:
+					print "Peak interference detected on lower contact"
+				self.cb_lower = self.pi.callback(gpio, pigpio.RISING_EDGE, self._callback_lower)
+				break
+			else:
+				if not inter_flag:
+					# start of next magnet
+					with self.lock_lower: # save old timestamp
+						self.lower_timestamps.append(t)
+					t = time.time()
+					one_count = 0
+					magnet_count = magnet_count + 1
+					print "Magnet Count: ", magnet_count
+				else:
+					# break out of interrupt thread and reactivate listening
+					print "Peak interference detected on lower contact"
+					self.cb_lower = self.pi.callback(gpio, pigpio.RISING_EDGE, self._callback_lower)
+					break
+					
+			
+				
+>>>>>>> 663b9502f56d58be3c9e90dfed9eeefdaee9291b
 				
 			
 			
 	def _callback_higher(self, gpio, level, tick):
+<<<<<<< HEAD
 		t = time.time()
 		
 		# stop interrupts
@@ -288,10 +376,17 @@ class KuBo():
 		print "==== Callback higher reed contact ===="
 		
 		timestamps = []
+=======
+		print "==== Callback higher reed contact ===="
+		t = time.time()
+		# stop interrupts
+		self.cb_higher.cancel()
+>>>>>>> 663b9502f56d58be3c9e90dfed9eeefdaee9291b
 		magnet_count = 0
 		one_count = 0
 		while True:
 			inter_flag = False
+<<<<<<< HEAD
 			input = 1
 			while input:
 				input = self.pi.read(gpio)
@@ -315,12 +410,25 @@ class KuBo():
 				# debug
 				# self.data.append(input)
 				
+=======
+			while self.pi.read(gpio):
+					one_count = one_count + 1
+					time.sleep(self.T_poll)
+			if one_count < self.min_one_count:
+				# Interference if no valey interference compensates for it
+				print "Peak Interference suspicion"
+				inter_flag = True
+			
+			zero_count = 0
+			while self.pi.read(gpio) == 0:
+>>>>>>> 663b9502f56d58be3c9e90dfed9eeefdaee9291b
 				zero_count = zero_count + 1
 				time.sleep(self.T_poll)
 				if zero_count > self.max_zero_count:
 					# No more consecutive magnets --> activate 
 					# interrupts again for next passing of weights
 					break
+<<<<<<< HEAD
 				elif inter_flag and zero_count >= self.min_zero_count:
 					# No valey interference to compensate for peak interference
 					# check if interference is isolated
@@ -373,6 +481,45 @@ class KuBo():
 				one_count = 0
 				magnet_count = magnet_count + 1
 				print "Magnet Count: ", magnet_count
+=======
+			if zero_count < self.min_zero_count:
+				# Interference --> continue with first while loop
+				print "Valey Interference detected on higher contact"
+				if inter_flag:
+					print "No peak interference"
+			elif zero_count > self.max_zero_count:
+				if not inter_flag:
+					# No more consecutive magnets --> activate 
+					# interrupts again for next passing of weights
+					# Do calculations here
+					magnet_count = magnet_count + 1
+					print "Magnet Count: ", magnet_count
+					with self.lock_higher: # save old timestamp
+						self.higher_timestamps.append(t)
+						print " Timestamps: ", self.higher_timestamps
+						self.higher_history.append(self.higher_timestamps)
+						self.higher_timestamps = []
+					
+					print "End of consecutive magnets"
+				else:
+					print "Peak interference detected on higher contact"
+				self.cb_higher = self.pi.callback(gpio, pigpio.RISING_EDGE, self._callback_higher)
+				break
+			else:
+				if not inter_flag:
+					# start of next magnet
+					with self.lock_higher: # save old timestamp
+						self.higher_timestamps.append(t)
+					t = time.time()
+					one_count = 0
+					magnet_count = magnet_count + 1
+					print "Magnet Count: ", magnet_count
+				else:
+					# break out of interrupt thread and reactivate listening
+					print "Peak interference detected on higher contact"
+					self.cb_higher = self.pi.callback(gpio, pigpio.RISING_EDGE, self._callback_higher)
+					break
+>>>>>>> 663b9502f56d58be3c9e90dfed9eeefdaee9291b
 			
 	def stop_listening(self):
 		if hasattr(self, 'cb_lower') and hasattr(self, 'cb_higher'):
