@@ -395,7 +395,7 @@ class KuBo():
 		self.cb_higher = self.pi.callback(self.higherReedPin, pigpio.RISING_EDGE, self._callback_higher)
 		
 	def get_lower_data(self):
-		data = []
+		data = [None]*4
 		with self.lock_lower:
 			if self.lower_flag:
 				data[0] = True
@@ -409,7 +409,7 @@ class KuBo():
 		return data
 		
 	def get_higher_data(self):
-		data = []
+		data = [None]*4
 		with self.lock_higher:
 			if self.higher_flag:
 				data[0] = True
