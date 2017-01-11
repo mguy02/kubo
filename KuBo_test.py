@@ -4,9 +4,14 @@ import numpy as np
 import time
 from KuBo import KuBo
 
+# Instantiate KuBo --> activates listener on sensors
 kubo = KuBo()
 
+print "Listening for interrupts..."
+
 ######################### Jumping and Sound Tests ##############################
+# Do the jumping routine from the video
+
 """
 print "Kubo says KuBo and jumps"
 kubo.say('kuuu.mp3')
@@ -30,15 +35,31 @@ time.sleep(2)
 # Kill potential open omx-processes
 kubo.stop_voice()
 """
+
 ######################### Interrupt Tests #################################
-print "Listening for interrupts..."
+
 
 while True:
-	try:		
-		time.sleep(2)
+	try:
+		lower_data = kubo.get_lower_data()
+		higher_data = kubo.get_higher_data()
+		if lower_data[0]:
+			print "==== Weight block detected at lower sensor ===="
+			print "Time: ", lower_data[1]
+			print "Weight: ", lower_data[2]
+			print "Speed: ", lower_data[3]
+			print
+			
+		if higher_data[0]:
+			print "==== Weight block detected at higher sensor ===="
+			print "Time: ", higher_data[1]
+			print "Weight: ", higher_data[2]
+			print "Speed: ", higher_data[3]
+			print
+			
+		time.sleep(0.5)
 	except KeyboardInterrupt:
 		kubo.stop_voice()
 		kubo.stop_listening()
 		raise
-
 

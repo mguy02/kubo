@@ -394,6 +394,35 @@ class KuBo():
 		self.cb_lower = self.pi.callback(self.lowerReedPin, pigpio.RISING_EDGE, self._callback_lower)
 		self.cb_higher = self.pi.callback(self.higherReedPin, pigpio.RISING_EDGE, self._callback_higher)
 		
+	def get_lower_data(self):
+		data = []
+		with self.lock_lower:
+			if self.lower_flag:
+				data[0] = True
+				data[1] = self.lower_timestamp
+				data[2] = self.lower_weight
+				data[3] = self.lower_speed
+				self.lower_flag = 0
+			else:
+				data[0] = False
+				
+		return data
+		
+	def get_higher_data(self):
+		data = []
+		with self.lock_higher:
+			if self.higher_flag:
+				data[0] = True
+				data[1] = self.higher_timestamp
+				data[2] = self.higher_weight
+				data[3] = self.higher_speed
+				self.higher_flag = 0
+			else:
+				data[0] = False
+				
+		return data
+			
+		
 		
 			
 
