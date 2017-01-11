@@ -31,7 +31,7 @@ while True:
 			elif low_flag == 2:
 				low_flag = 1
 				kubo.say('ku.mp3')
-			else low_flag == 1:
+			elif low_flag == 1:
 				low_flag = 2
 				zero_time = time.time()
 			
@@ -45,7 +45,7 @@ while True:
 				up_flag = 1
 			elif up_flag == 2:
 				up_flag = 1
-			else up_flag == 1:
+			elif up_flag == 1:
 				up_flag = 2
 				kubo.say('bo.mp3')
 				
