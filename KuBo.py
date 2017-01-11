@@ -7,8 +7,6 @@ import pigpio
 import time
 import sys
 import numpy as np
-import os
-import pygame
 
 class KuBo():
 	
@@ -43,8 +41,6 @@ class KuBo():
 		self.audiopath = '/home/pi/Documents/GitKubo/kubo/sounds/'
 		self.omx = OMXPlayer(self.audiopath + 'gangsta.mp3')
 		self.omx.pause()
-		#os.environ["SDL_VIDEODRIVER"] = "dummy"
-		#pygame.mixer.init()
 		
 		# Initiallize edge listener
 		self.cb_lower = self.pi.callback(self.lowerReedPin, pigpio.RISING_EDGE, self._callback_lower)
@@ -172,48 +168,6 @@ class KuBo():
 			
 	def say(self, filename):
 		return self.omx.load(self.audiopath + filename)
-		
-	def say2(self, sound_obj, vol=1, stop_obj = False):
-		
-		#multiple sound objects
-		if isinstance(sound_obj, list):
-			c = 0
-			# adjust volume(s)
-			for obj in sound_obj:
-				if isinstance(vol, list):
-					obj.set_volume(vol[c])
-				else:
-					obj.set_volume(vol)
-				c = c + 1
-				
-			#stop sound object(s)	
-			if isinstance(stop_obj, bool):
-				if stop_obj:
-					pygame.mixer.stop()
-			else:
-				stop_obj.stop()
-			
-			#start sound objects
-			for obj in sound_obj:
-				obj.play()
-		#one sound object
-		else:
-			# adjust volume
-			sound_obj.set_volume(vol)
-			
-			# stop sound object(s)
-			if isinstance(stop_obj, bool):
-				if stop_obj:
-					pygame.mixer.stop()
-			else:
-				stop_obj.stop()
-			
-			# start sound object
-			sound_obj.play()
-	
-	def sound_obj(self, filename):
-		return pygame.mixer.Sound(self.audiopath + filename)
-		
 		
 	def init_voice(self, audiopath = '/home/pi/Documents/Audio/'):
 		self.audiopath = audiopath
