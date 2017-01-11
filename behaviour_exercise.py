@@ -1,6 +1,5 @@
 import numpy as np
 import time
-#from KuBo import KuBo
 from array import *
 import pyglet
 import time
@@ -32,16 +31,15 @@ num_speed = 3 # number of total renges for the speed we have low - medium - high
 num_weight = 2
 num_weightspeed_combination = num_speed*num_weight
 counter = array('b', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # array which count how many repetition with the same speed and same weight are executed by the user
-#kubo = KuBo()
 
 
 class Behaviour_exercise(object):
-    def __init__(self, flags):
+    def __init__(self, kubo):
         self.speed = 0
         self.weight = 0
         self.motivation = 0
-        self.flags = flags
         self.relax = 0
+		self.kubo = kubo
 
     '''
     Set&Get functions of the varibles
@@ -125,98 +123,88 @@ class Behaviour_exercise(object):
 '''
 List of function for the different situation
 '''
-def intr_lowweight_lowspeed(status, sensor_low, sensor_up):
+def intr_lowweight_lowspeed(status):
     if (counter[status] == 3):
-        playSound('i_l_l.mp3')#kubo.say('i_l_l.mp3')
+        kubo.say('i_l_l.mp3')
     return
 
 
-def intr_lowweight_medspeed(status, sensor_low, sensor_up):
+def intr_lowweight_medspeed(status):
     if (counter[status] == 3):
-        playSound('i_l_m.mp3')  #kubo.say('i_l_m.mp3')
+        kubo.say('i_l_m.mp3')
     return
 
 
-def intr_lowweight_highspeed(status, sensor_low, sensor_up):
+def intr_lowweight_highspeed(status):
     if (counter[status] == 3):
-        playSound('i_l_h.mp3')  #kubo.say('i_l_h.mp3')
+        kubo.say('i_l_h.mp3')
     return
 
 
-def intr_highweight_lowspeed(status, sensor_low, sensor_up):
+def intr_highweight_lowspeed(status):
     if (counter[status] == 3):
-        playSound('i_h_l.mp3')  #kubo.say('i_h_l.mp3')
+        kubo.say('i_h_l.mp3')
     return
 
 
-def intr_highweight_medspeed(status, sensor_low, sensor_up):
+def intr_highweight_medspeed(status):
     if (counter[status] == 3):
-        playSound('i_h_m.mp3')  #kubo.say('i_h_m.mp3')
+        kubo.say('i_h_m.mp3')
     return
 
 
-def intr_highweight_highspeed(status, sensor_low, sensor_up):
+def intr_highweight_highspeed(status):
     if (counter[status] == 3):
-        playSound('i_h_h.mp3')  #kubo.say('i_h_h.mp3')
+        kubo.say('i_h_h.mp3')
     return
 
 
-def extr_lowweight_lowspeed(status, sensor_low, sensor_up):
+def extr_lowweight_lowspeed(status):
     if (counter[status] == 3):
-        playSound('e_l_l.mp3')  #kubo.say('e_l_l.mp3')
+        kubo.say('e_l_l.mp3')
     return
 
 
-def extr_lowweight_medspeed(status, sensor_low, sensor_up):
+def extr_lowweight_medspeed(status):
     if (counter[status] == 3):
-        playSound('e_l_m.mp3')  #kubo.say('e_l_m.mp3')
+        kubo.say('e_l_m.mp3')
     return
 
 
 
-def extr_lowweight_highspeed(status, sensor_low, sensor_up):
+def extr_lowweight_highspeed(status):
     if (counter[status] == 3):
-        playSound('e_l_h.mp3')  #kubo.say('e_l_h.mp3')
+        kubo.say('e_l_h.mp3')
     return
 
 
 
-def extr_highweight_lowspeed(status, sensor_low, sensor_up):
+def extr_highweight_lowspeed(status):
     if (counter[status] == 3):
-        playSound('e_h_l.mp3')  #kubo.say('e_h_l.mp3')
+        kubo.say('e_h_l.mp3')
     return
 
 
-def extr_highweight_medspeed(status, sensor_low, sensor_up):
+def extr_highweight_medspeed(status):
     if (counter[status] == 3):
-        playSound('e_h_m.mp3')  #kubo.say('e_h_m.mp3')
+        kubo.say('e_h_m.mp3')
     return
 
 
-def extr_highweight_highspeed(status, sensor_low, sensor_up):
+def extr_highweight_highspeed(status):
     if (counter[status] == 3):
-        playSound('e_h_h.mp3')  #kubo.say('e_h_h.mp3')
+        kubo.say('e_h_h.mp3')
     return
 
 
-def extr_relax(status, sensor_low, sensor_up):
-    playSound('i_relax.mp3')  #kubo.say('i_relax.mp3')
+def extr_relax(status):
+    kubo.say('i_relax.mp3')
     return
 
 
-def intr_relax(status, sensor_low, sensor_up):
-    playSound('i_relax.mp3')  #kubo.say('i_relax.mp3')
+def intr_relax(status):
+    kubo.say('i_relax.mp3')
     return
-
-'''
-Function created to play sound from the PC
-it will be substitute by Kubo.say in the other library
-'''
-def playSound(name):
-    song = pyglet.resource.media(name)
-    song.play()
-    time.sleep(3)
-    song.pause()
 
 '''
 Everytime the trainer conclude a repetition of the exercise we update the counter array

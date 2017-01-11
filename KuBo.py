@@ -38,7 +38,7 @@ class KuBo():
 		self.freq_list = [0]
 		
 		# Start Audio Player process
-		self.audiopath = '/home/pi/Documents/Audio/'
+		self.audiopath = '/home/pi/Documents/GitKubo/kubo/sounds/'
 		self.omx = OMXPlayer(self.audiopath + 'gangsta.mp3')
 		self.omx.pause()
 		

@@ -12,7 +12,7 @@ print "Listening for interrupts..."
 ######################### Jumping and Sound Tests ##############################
 # Do the jumping routine from the video
 
-"""
+
 print "Kubo says KuBo and jumps"
 kubo.say('kuuu.mp3')
 time.sleep(1)
@@ -34,7 +34,7 @@ time.sleep(2)
 
 # Kill potential open omx-processes
 kubo.stop_voice()
-"""
+
 
 ######################### Interrupt Tests #################################
 
