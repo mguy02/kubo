@@ -2,17 +2,25 @@
 
 import numpy as np
 import time
+import pygame
 from KuBo import KuBo
 
 # Instantiate KuBo --> activates listener on sensors
 kubo = KuBo()
 
+audiopath = '/home/pi/Documents/Audio/'
+
 print "Listening for interrupts..."
+
+
+
+
+
 
 ######################### Jumping and Sound Tests ##############################
 # Do the jumping routine from the video
 
-"""
+
 print "Kubo says KuBo and jumps"
 kubo.say('kuuu.mp3')
 time.sleep(1)
@@ -34,6 +42,18 @@ time.sleep(2)
 
 # Kill potential open omx-processes
 kubo.stop_voice()
+
+"""
+kuuu = kubo.sound_obj('kuuu.mp3')
+bo = kubo.sound_obj('bo.mp3')
+ex = kubo.sound_obj('example.mp3')
+
+kubo.say2(sound_obj=ex, vol=1)
+time.sleep(5)
+
+
+kubo.say2(sound_obj=bo, vol=0.5)
+
 """
 
 ######################### Interrupt Tests #################################
