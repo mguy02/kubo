@@ -39,7 +39,7 @@ class KuBo():
 		
 		# Start Audio Player process
 		self.audiopath = '/home/pi/Documents/GitKubo/kubo/sounds/'
-		self.omx = OMXPlayer(self.audiopath + 'gangsta.mp3')
+		self.omx = OMXPlayer(self.audiopath + 'ku.mp3')
 		self.omx.pause()
 		
 		# Initiallize edge listener
@@ -47,8 +47,8 @@ class KuBo():
 		self.cb_higher = self.pi.callback(self.higherReedPin, pigpio.RISING_EDGE, self._callback_higher)
 				
 		# zero count parameters
-		# self.max_zero_count = 45
-		self.max_zero_count = 1000
+		self.max_zero_count = 10
+		#self.max_zero_count = 1000
 
 		self.min_zero_count = 5
 		
@@ -167,6 +167,7 @@ class KuBo():
 			return self.t_jump.isAlive()
 			
 	def say(self, filename):
+		#self.omx.quit()
 		return self.omx.load(self.audiopath + filename)
 		
 	def init_voice(self, audiopath = '/home/pi/Documents/Audio/'):
@@ -186,7 +187,7 @@ class KuBo():
 		
 		# self.data.append('...')
 		
-		print "==== Callback lower reed contact ===="
+		#print "==== Callback lower reed contact ===="
 		
 		timestamps = []
 
@@ -231,7 +232,7 @@ class KuBo():
 					if magnet_count == 0:
 						# isolated interference
 						self.cb_lower = self.pi.callback(gpio, pigpio.RISING_EDGE, self._callback_lower)
-						print "Interference detected"
+						#print "Interference detected"
 						return
 					else:
 						# interference between magnets --> treet ones as zeros
@@ -245,9 +246,9 @@ class KuBo():
 			elif zero_count > self.max_zero_count:
 				# No more consecutive magnets --> calculate values of one repetition
 				magnet_count = magnet_count + 1
-				print "Magnet Count: ", magnet_count
+				#print "Magnet Count: ", magnet_count
 				timestamps.append(t) # save old timestamp
-				print " Timestamps: ", timestamps
+				#print " Timestamps: ", timestamps
 				
 				v = 0
 				if magnet_count > 1:
@@ -275,7 +276,7 @@ class KuBo():
 				t = time.time()
 				one_count = 0
 				magnet_count = magnet_count + 1
-				print "Magnet Count: ", magnet_count
+				#print "Magnet Count: ", magnet_count
 					
 				
 			
@@ -288,7 +289,7 @@ class KuBo():
 		
 		self.data.append('...')
 		
-		print "==== Callback higher reed contact ===="
+		#print "==== Callback higher reed contact ===="
 		
 		timestamps = []
 
@@ -333,7 +334,7 @@ class KuBo():
 					if magnet_count == 0:
 						# isolated interference
 						self.cb_higher = self.pi.callback(gpio, pigpio.RISING_EDGE, self._callback_higher)
-						print "Interference detected"
+						#print "Interference detected"
 						return
 					else:
 						# interference between magnets --> treet ones as zeros
@@ -347,9 +348,9 @@ class KuBo():
 			elif zero_count > self.max_zero_count:
 				# No more consecutive magnets --> calculate values of one repetition
 				magnet_count = magnet_count + 1
-				print "Magnet Count: ", magnet_count
+				#print "Magnet Count: ", magnet_count
 				timestamps.append(t) # save old timestamp
-				print " Timestamps: ", timestamps
+				#print " Timestamps: ", timestamps
 				
 				v = 0
 				if magnet_count > 1:
@@ -367,7 +368,7 @@ class KuBo():
 					self.higher_timestamp = timestamps[magnet_count-1]
 					
 					
-				print "End of consecutive magnets"
+				#print "End of consecutive magnets"
 				# Reactivate interrupt listener
 				self.cb_higher = self.pi.callback(gpio, pigpio.RISING_EDGE, self._callback_higher)
 				break
@@ -377,7 +378,7 @@ class KuBo():
 				t = time.time()
 				one_count = 0
 				magnet_count = magnet_count + 1
-				print "Magnet Count: ", magnet_count
+				#print "Magnet Count: ", magnet_count
 			
 	def stop_listening(self):
 		if hasattr(self, 'cb_lower') and hasattr(self, 'cb_higher'):
